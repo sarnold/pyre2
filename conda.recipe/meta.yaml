@@ -11,6 +11,7 @@ source:
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . -vv
+  skip: true  # [py<36]
 
 requirements:
   build:
@@ -28,12 +29,14 @@ requirements:
     - re2
 
 test:
+  commands:
+    - export "PYTHONIOENCODING=utf8"  # [unix]
+    - set "PYTHONIOENCODING=utf8"  # [win]
+    - python -m unittest discover -f -s tests
   imports:
     - re2
   source_files:
     - tests
-  commands:
-    - python -m unittest discover -f -s tests
 
 about:
   home: "https://github.com/andreasvc/pyre2"

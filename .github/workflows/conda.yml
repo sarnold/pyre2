@@ -9,8 +9,6 @@ on:
 
 jobs:
   build:
-    env:
-      PYTHONIOENCODING: utf-8
     strategy:
       fail-fast: false
       matrix:
