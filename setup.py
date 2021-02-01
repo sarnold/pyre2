@@ -10,7 +10,7 @@ from setuptools.command.build_ext import build_ext
 
 
 # update the version both here and in conda.recipe/meta.yaml
-__version__ = '0.3.3'
+__version__ = '0.3.4.dev0'
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
@@ -23,7 +23,6 @@ PLAT_TO_CMAKE = {
 # A CMakeExtension needs a sourcedir instead of a file list.
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=""):
-        # auditwheel repair command needs libraries=
         Extension.__init__(self, name, sources=[], libraries=['re2'])
         self.sourcedir = os.path.abspath(sourcedir)
 
@@ -118,4 +117,5 @@ setup(
     version=__version__,
     ext_modules=[CMakeExtension('re2')],
     cmdclass={'build_ext': CMakeBuild},
+    zip_safe=False,
 )

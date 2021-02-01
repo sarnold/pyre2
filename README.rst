@@ -2,7 +2,57 @@
 pyre2
 =====
 
-.. contents::
+**Python wrapper for RE2**
+
+CI Status
+
+.. image:: https://github.com/andreasvc/pyre2/workflows/Build/badge.svg
+    :target: https://github.com/freepn/andreasvc/pyre2/actions?query=workflow:Build
+    :alt: Build CI Status
+
+.. image:: https://github.com/andreasvc/pyre2/workflows/Conda/badge.svg
+    :target: https://github.com/freepn/andreasvc/pyre2/actions?query=workflow:Conda
+    :alt: conda CI Status
+
+.. image:: https://github.com/andreasvc/pyre2/workflows/Release/badge.svg
+    :target: https://github.com/freepn/andreasvc/pyre2/actions?query=workflow:Release
+    :alt: Release CI Status
+
+
+Packaging
+
+.. image:: https://badge.fury.io/py/pyre2.svg
+   :target: https://badge.fury.io/py/pyre2
+
+.. image:: https://img.shields.io/github/license/andreasvc/pyre2
+    :target: https://github.com/andreasvc/pyre2/blob/master/LICENSE
+    :alt: License
+
+.. image:: https://img.shields.io/github/v/tag/andreasvc/pyre2?color=green&include_prereleases&label=latest%20release
+    :target: https://github.com/andreasvc/pyre2/releases
+    :alt: GitHub tag (latest SemVer, including pre-release)
+
+.. image:: https://img.shields.io/badge/python-3.6+-blue.svg
+    :target: https://www.python.org/downloads/
+    :alt: Python
+
+
+Anaconda cloud
+
+.. image:: https://anaconda.org/conda-forge/pyre2/badges/version.svg
+   :target: https://anaconda.org/conda-forge/pyre2
+
+.. image:: https://anaconda.org/conda-forge/pyre2/badges/platforms.svg
+   :target: https://anaconda.org/conda-forge/pyre2
+
+.. image:: https://anaconda.org/conda-forge/pyre2/badges/downloads.svg
+   :target: https://anaconda.org/conda-forge/pyre2
+
+
+.. contents:: Table of Contents
+   :depth: 2
+   :backlinks: top
+
 
 Summary
 =======
@@ -55,10 +105,11 @@ cmake generator.  For example:
 Platform-agnostic building with conda
 -------------------------------------
 
-An alternative to the above is provided via the ``conda`` recipe (use the
+An alternative to the above is provided via the `conda`_ recipe (use the
 `miniconda installer`_ if you don't have ``conda`` installed already).
 
 
+.. _conda: https://anaconda.org/conda-forge/pyre2
 .. _miniconda installer: https://docs.conda.io/en/latest/miniconda.html
 
 
@@ -73,11 +124,11 @@ The stated goal of this module is to be a drop-in replacement for ``re``, i.e.::
         import re
 
 That being said, there are features of the ``re`` module that this module may
-never have; these will be handled through fallback to the original ``re`` module``:
+never have; these will be handled through fallback to the original ``re`` module:
 
-    - lookahead assertions ``(?!...)``
-    - backreferences (``\\n`` in search pattern)
-    - \W and \S not supported inside character classes
+* lookahead assertions ``(?!...)``
+* backreferences (``\\n`` in search pattern)
+* \W and \S not supported inside character classes
 
 On the other hand, unicode character classes are supported (e.g., ``\p{Greek}``).
 Syntax reference: https://github.com/google/re2/wiki/Syntax

@@ -1,17 +1,20 @@
-name: conda
+name: Conda
 
 on:
   workflow_dispatch:
+  pull_request:
   push:
     branches:
       - master
 
 jobs:
   build:
+    env:
+      PYTHONIOENCODING: utf-8
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-latest, windows-2016, macos-latest]
+        platform: [ubuntu-latest, windows-latest, macos-latest]
         python-version: [3.6, 3.7, 3.8, 3.9]
 
     runs-on: ${{ matrix.platform }}
