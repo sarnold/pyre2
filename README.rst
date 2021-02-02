@@ -12,41 +12,45 @@ CI Status
 
 .. image:: https://github.com/andreasvc/pyre2/workflows/Conda/badge.svg
     :target: https://github.com/freepn/andreasvc/pyre2/actions?query=workflow:Conda
-    :alt: conda CI Status
+    :alt: Conda CI Status
 
 .. image:: https://github.com/andreasvc/pyre2/workflows/Release/badge.svg
     :target: https://github.com/freepn/andreasvc/pyre2/actions?query=workflow:Release
     :alt: Release CI Status
+
+.. image:: https://img.shields.io/github/v/tag/andreasvc/pyre2?color=green&include_prereleases&label=latest%20release
+    :target: https://github.com/andreasvc/pyre2/releases
+    :alt: GitHub tag (latest SemVer, including pre-release)
 
 
 Packaging
 
 .. image:: https://badge.fury.io/py/pyre2.svg
    :target: https://badge.fury.io/py/pyre2
+    :alt: Pypi version
 
 .. image:: https://img.shields.io/github/license/andreasvc/pyre2
     :target: https://github.com/andreasvc/pyre2/blob/master/LICENSE
     :alt: License
 
-.. image:: https://img.shields.io/github/v/tag/andreasvc/pyre2?color=green&include_prereleases&label=latest%20release
-    :target: https://github.com/andreasvc/pyre2/releases
-    :alt: GitHub tag (latest SemVer, including pre-release)
-
 .. image:: https://img.shields.io/badge/python-3.6+-blue.svg
     :target: https://www.python.org/downloads/
-    :alt: Python
+    :alt: Python version
 
 
 Anaconda cloud
 
 .. image:: https://anaconda.org/conda-forge/pyre2/badges/version.svg
    :target: https://anaconda.org/conda-forge/pyre2
+   :alt: version
 
 .. image:: https://anaconda.org/conda-forge/pyre2/badges/platforms.svg
    :target: https://anaconda.org/conda-forge/pyre2
+   :alt: platforms
 
 .. image:: https://anaconda.org/conda-forge/pyre2/badges/downloads.svg
    :target: https://anaconda.org/conda-forge/pyre2
+   :alt: downloads
 
 
 .. contents:: Table of Contents
@@ -78,12 +82,14 @@ Compiling from source
 
 Requirements for building the C++ extension from the repo source:
 
-* Building requires RE2, pybind11, and cmake installed in the build
+* A build environment with ``gcc`` or ``clang`` (e.g. ``sudo apt-get install build-essential``)
+* Build tools and libraries: RE2, pybind11, and cmake installed in the build
   environment.
 
   + On Ubuntu/Debian, install cmake, pybind11-dev, and libre2-dev packages
+    (also install Python development headers if needed, e.g. ``sudo apt-get install python-dev``)
   + On Gentoo, install dev-util/cmake, dev-python/pybind11, and dev-libs/re2
-  + For a venv you can install the pybind11 and cython packages from PyPI
+  + For a venv you can install the pybind11, cmake, and cython packages from PyPI
 
 On MacOS, use the ``brew`` package manager::
 
@@ -100,6 +106,16 @@ cmake generator.  For example:
 ::
 
   $ CMAKE_GENERATOR="Unix Makefiles" CMAKE_TOOLCHAIN_FILE=clang_toolchain.cmake tox -e deploy
+
+After the prerequisites are installed, install as follows::
+
+    $ pip install https://github.com/andreasvc/pyre2/archive/master.zip
+
+For development, get the source::
+
+    $ git clone git://github.com/andreasvc/pyre2.git
+    $ cd pyre2
+    $ make install
 
 
 Platform-agnostic building with conda
@@ -146,28 +162,6 @@ function ``set_fallback_notification`` determines the behavior in these cases::
 ``set_fallback_notification`` takes three values:
 ``re.FALLBACK_QUIETLY`` (default), ``re.FALLBACK_WARNING`` (raise a warning),
 and ``re.FALLBACK_EXCEPTION`` (raise an exception).
-
-Installation
-============
-
-Prerequisites:
-
-* The `re2 library from Google <https://github.com/google/re2>`_
-* The Python development headers (e.g. ``sudo apt-get install python-dev``)
-* A build environment with ``gcc`` or ``clang`` (e.g. ``sudo apt-get install build-essential``)
-* Cython 0.20+ (``pip install cython``)
-
-After the prerequisites are installed, install as follows (``pip3`` for python3)::
-
-    $ pip install https://github.com/andreasvc/pyre2/archive/master.zip
-
-For development, get the source::
-
-    $ git clone git://github.com/andreasvc/pyre2.git
-    $ cd pyre2
-    $ make install
-
-(or ``make install3`` for Python 3)
 
 Documentation
 =============
@@ -245,8 +239,8 @@ The tests show the following differences with Python's ``re`` module:
 * The ``$`` operator in Python's ``re`` matches twice if the string ends
   with ``\n``. This can be simulated using ``\n?$``, except when doing
   substitutions.
-* ``pyre2`` and Python's ``re`` may behave differently with nested groups.
-	See ``tests/emptygroups.txt`` for the examples.
+* The ``pyre2`` module and Python's ``re`` may behave differently with nested groups.
+  See ``tests/emptygroups.txt`` for the examples.
 
 Please report any further issues with ``pyre2``.
 
