@@ -125,7 +125,7 @@ class ReTests(unittest.TestCase):
 
     def test_bug_3629(self):
         # A regex that triggered a bug in the sre-code validator
-        re.compile("(?P<quote>)(?(quote))")
+        re.compile('(?P<quote>)(?(quote))')
 
     def test_sub_template_numeric_escape(self):
         # bug 776311 and friends
@@ -686,14 +686,14 @@ class ReTests(unittest.TestCase):
         self.assertRaises(TypeError, re.finditer, "a", {})
 
 
-def run_re_tests():
+def test_re_suite():
     try:
-        from tests.re_tests import benchmarks, tests, SUCCEED, FAIL, SYNTAX_ERROR
+        from tests.re_utils import benchmarks, tests, SUCCEED, FAIL, SYNTAX_ERROR
     except ImportError:
-        from re_tests import benchmarks, tests, SUCCEED, FAIL, SYNTAX_ERROR
+        from re_utils import benchmarks, tests, SUCCEED, FAIL, SYNTAX_ERROR
 
     if verbose:
-        print('\nRunning re_tests test suite')
+        print('\nRunning test_re_suite ...')
     else:
         # To save time, only run the first and last 10 tests
         #tests = tests[:10] + tests[-10:]
@@ -807,7 +807,3 @@ def run_re_tests():
                 result = obj.search(s)
                 if result is None:
                     print('=== Fails on unicode-sensitive match', t)
-
-
-if __name__ == "__main__":
-    unittest.main()
