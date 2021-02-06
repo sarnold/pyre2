@@ -119,7 +119,7 @@ def benchmarks_to_ReST(benchmarks):
 def register_test(name, pattern, num_runs = 100, **data):
     def decorator(method):
         tests[name] = method
-        method.pattern = pattern
+        method.pattern = pattern.encode('utf-8')
         method.num_runs = num_runs
         method.data = data
 
@@ -157,7 +157,7 @@ def replace_wikilinks(pattern, data):
     """
     This test replaces links of the form [[Obama|Barack_Obama]] to Obama.
     """
-    return len(pattern.sub(r'\1', data))
+    return len(pattern.sub(r'\1'.encode('utf-8'), data))
 
 
 
