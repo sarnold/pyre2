@@ -84,15 +84,13 @@ jobs:
 
       # download all artifacts to project dir
       - uses: actions/download-artifact@v2
-
-      - name: Install gitchangelog
-        run: |
-          pip install git+https://github.com/freepn/gitchangelog@3.0.5#egg=gitchangelog
+        with:
+          path: dist
 
       - name: Generate changes file
-        run: |
-          export GITCHANGELOG_CONFIG_FILENAME=$(get-rcpath)
-          gitchangelog $(git describe --abbrev=0 ${{ env.VERSION }})..${{ env.VERSION }} > CHANGES.md
+        uses: sarnold/gitchangelog-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN}}
 
       - name: Create draft release
         id: create_release
@@ -103,7 +101,12 @@ jobs:
           tag_name: ${{ env.VERSION }}
           name: Release v${{ env.VERSION }}
           body_path: CHANGES.md
-          draft: true
-          prerelease: true
+          draft: false
+          prerelease: false
           # uncomment below to upload wheels to github releases
-          # files: wheels/pyre2*.whl
+          files: dist/pyre2*.whl
+
+      - uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
