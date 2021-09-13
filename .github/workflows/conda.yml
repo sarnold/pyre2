@@ -57,5 +57,4 @@ jobs:
 
       - name: Test
         run: |
-          python -m pytest -v .
-          # was: python -m unittest discover -f -s tests/
+          python -m pytest -v -m "not subscript" .

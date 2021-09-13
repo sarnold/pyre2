@@ -1,0 +1,15 @@
+Empty groups - None vs empty
+============================
+
+    >>> import re
+    >>> import re2
+    >>> re2.set_fallback_notification(re2.FALLBACK_EXCEPTION)
+
+This one was formerly a None vs empty string difference until July 2021:
+
+    >>> re.search(r'((.*)*.)', 'a').groups()
+    ('a', '')
+    >>> re2.search(r'((.*)*.)', 'a').groups()
+    ('a', '')
+
+    >>> re2.set_fallback_notification(re2.FALLBACK_QUIETLY)
