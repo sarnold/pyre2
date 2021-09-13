@@ -1,3 +1,6 @@
+Cython
+bandit
 pytest
-regex
-simplejson
+pytest-cov
+coverage
+coverage_python_version

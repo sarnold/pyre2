@@ -15,3 +15,34 @@ minversion = "6.0"
 testpaths = [
     "tests",
 ]
+
+[tool.coverage.run]
+plugins = ["Cython.Coverage"]
+branch = true
+source = ["src"]
+omit = ["tests"]
+
+[tool.coverage.paths]
+source = ["src"]
+
+[tool.coverage.report]
+#fail_under = 95
+show_missing = true
+
+[tool.black]
+line-length = 84
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
