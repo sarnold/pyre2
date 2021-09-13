@@ -2,46 +2,11 @@
  pyre2: Python RE2 wrapper for linear-time regular expressions
 ===============================================================
 
-.. image:: https://github.com/andreasvc/pyre2/workflows/Build/badge.svg
-    :target: https://github.com/andreasvc/pyre2/actions?query=workflow:Build
-    :alt: Build CI Status
+|smoke| |build| |release| |conda|
 
-.. image:: https://github.com/andreasvc/pyre2/workflows/Release/badge.svg
-    :target: https://github.com/andreasvc/pyre2/actions?query=workflow:Release
-    :alt: Release CI Status
+|tag| |pypi| |license| |python|
 
-.. image:: https://img.shields.io/github/v/tag/andreasvc/pyre2?color=green&include_prereleases&label=latest%20release
-    :target: https://github.com/andreasvc/pyre2/releases
-    :alt: GitHub tag (latest SemVer, including pre-release)
-
-.. image:: https://badge.fury.io/py/pyre2.svg
-   :target: https://badge.fury.io/py/pyre2
-    :alt: Pypi version
-
-.. image:: https://github.com/andreasvc/pyre2/workflows/Conda/badge.svg
-    :target: https://github.com/andreasvc/pyre2/actions?query=workflow:Conda
-    :alt: Conda CI Status
-
-.. image:: https://img.shields.io/github/license/andreasvc/pyre2
-    :target: https://github.com/andreasvc/pyre2/blob/master/LICENSE
-    :alt: License
-
-.. image:: https://img.shields.io/badge/python-3.6+-blue.svg
-    :target: https://www.python.org/downloads/
-    :alt: Python version
-
-.. image:: https://anaconda.org/conda-forge/pyre2/badges/version.svg
-   :target: https://anaconda.org/conda-forge/pyre2
-   :alt: version
-
-.. image:: https://anaconda.org/conda-forge/pyre2/badges/platforms.svg
-   :target: https://anaconda.org/conda-forge/pyre2
-   :alt: platforms
-
-.. image:: https://anaconda.org/conda-forge/pyre2/badges/downloads.svg
-   :target: https://anaconda.org/conda-forge/pyre2
-   :alt: downloads
-
+|ver| |plat| |downloads| 
 
 .. contents:: Table of Contents
    :depth: 2
@@ -250,3 +215,47 @@ This code builds on the following projects (in chronological order):
 - Mike Axiak's Cython version of this: http://github.com/axiak/pyre2/ (seems not actively maintained)
 - This fork adds Python 3 support and other improvements.
 
+
+.. |smoke| image:: https://github.com/sarnold/pyre2/actions/workflows/ci.yml/badge.svg
+    :target: https://github.com/sarnold/pyre2/actions/workflows/ci.yml
+    :alt: Smoke CI Status
+
+.. |build| image:: https://github.com/andreasvc/pyre2/workflows/Build/badge.svg
+    :target: https://github.com/andreasvc/pyre2/actions?query=workflow:Build
+    :alt: Build CI Status
+
+.. |release| image:: https://github.com/andreasvc/pyre2/workflows/Release/badge.svg
+    :target: https://github.com/andreasvc/pyre2/actions?query=workflow:Release
+    :alt: Release CI Status
+
+.. |tag| image:: https://img.shields.io/github/v/tag/andreasvc/pyre2?color=green&include_prereleases&label=latest%20release
+    :target: https://github.com/andreasvc/pyre2/releases
+    :alt: GitHub tag (latest SemVer, including pre-release)
+
+.. |pypi| image:: https://badge.fury.io/py/pyre2.svg
+   :target: https://badge.fury.io/py/pyre2
+    :alt: Pypi version
+
+.. |conda| image:: https://github.com/andreasvc/pyre2/workflows/Conda/badge.svg
+    :target: https://github.com/andreasvc/pyre2/actions?query=workflow:Conda
+    :alt: Conda CI Status
+
+.. |license| image:: https://img.shields.io/github/license/andreasvc/pyre2
+    :target: https://github.com/andreasvc/pyre2/blob/master/LICENSE
+    :alt: License
+
+.. |python| image:: https://img.shields.io/badge/python-3.6+-blue.svg
+    :target: https://www.python.org/downloads/
+    :alt: Python version
+
+.. |ver| image:: https://anaconda.org/conda-forge/pyre2/badges/version.svg
+   :target: https://anaconda.org/conda-forge/pyre2
+   :alt: version
+
+.. |plat| image:: https://anaconda.org/conda-forge/pyre2/badges/platforms.svg
+   :target: https://anaconda.org/conda-forge/pyre2
+   :alt: platforms
+
+.. |downloads| image:: https://anaconda.org/conda-forge/pyre2/badges/downloads.svg
+   :target: https://anaconda.org/conda-forge/pyre2
+   :alt: downloads
