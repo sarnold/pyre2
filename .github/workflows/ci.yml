@@ -55,7 +55,7 @@ jobs:
 
     - name: Build sdist and wheel pkgs
       run: |
-        tox -e deploy
+        tox -e build
 
     - name: Test using built wheel
       run: |

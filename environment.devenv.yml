@@ -11,3 +11,4 @@ dependencies:
   - re2
   - pytest
   - regex
+  - six
