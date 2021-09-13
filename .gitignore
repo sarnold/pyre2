@@ -12,4 +12,5 @@ tests/access.log
 *.pyc
 *.swp
 *.egg-info
+*.patch
 .coverage

@@ -47,7 +47,9 @@ jobs:
 
     - name: Test pip dev install
       run: |
-        tox -e py
+        tox
+      env:
+        PLATFORM: ${{ matrix.os }}
 
     - name: Build dist pkgs
       run: |
