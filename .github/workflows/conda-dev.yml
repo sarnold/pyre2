@@ -16,6 +16,10 @@ jobs:
       matrix:
         os: ['ubuntu-18.04', 'ubuntu-20.04']
         python-version: ['3.7', '3.8', '3.9']
+    env:
+      OS: ${{ matrix.os }}
+      PYTHON: ${{ matrix.python-version }}
+      PYTHONIOENCODING: utf-8
 
     steps:
     - uses: actions/checkout@v2

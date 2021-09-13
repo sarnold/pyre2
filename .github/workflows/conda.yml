@@ -12,11 +12,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-latest, windows-2016, macos-latest]
+        os: [ubuntu-latest, windows-2016, macos-latest]
         python-version: [3.8, 3.9]
-
-    runs-on: ${{ matrix.platform }}
-
+    runs-on: ${{ matrix.os }}
+    env:
+      OS: ${{ matrix.os }}
+      PYTHON: ${{ matrix.python-version }}
+      PYTHONIOENCODING: utf-8
     # The setup-miniconda action needs this to activate miniconda
     defaults:
       run:
@@ -42,14 +44,18 @@ jobs:
           use-only-tar-bz2: true
           auto-activate-base: true
 
-      - name: Prepare
-        run: conda install conda-build conda-verify
+      #- name: Prepare
+        #run: conda install conda-build conda-verify
 
-      - name: Build
-        run: conda build conda.recipe
+      #- name: Build
+        #run: conda build conda.recipe
 
       - name: Install
-        run: conda install -c ${CONDA_PREFIX}/conda-bld/ pyre2
+        run: |
+          conda install pyre2 pytest
+          # was: conda install -c ${CONDA_PREFIX}/conda-bld/ pyre2
 
       - name: Test
-        run: python -m unittest discover -f -s tests/
+        run: |
+          python -m pytest -v .
+          # was: python -m unittest discover -f -s tests/

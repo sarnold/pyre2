@@ -17,6 +17,7 @@ jobs:
     env:
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python-version }}
+      PYTHONIOENCODING: utf-8
       PIP_DOWNLOAD_CACHE: ${{ github.workspace }}/../.pip_download_cache
     strategy:
       fail-fast: false
@@ -29,7 +30,7 @@ jobs:
       with:
         fetch-depth: 0
 
-    - uses: actions/setup-python@v2.2.2
+    - uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
 
