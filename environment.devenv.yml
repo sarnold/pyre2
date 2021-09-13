@@ -1,0 +1,13 @@
+name: pyre2
+
+dependencies:
+  - python
+  - cmake>=3.18
+  - ninja
+  - cython
+  - cxx-compiler
+  - pybind11
+  - pip
+  - re2
+  - pytest
+  - regex
