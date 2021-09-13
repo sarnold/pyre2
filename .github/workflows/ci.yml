@@ -9,6 +9,7 @@ on:
 
 jobs:
   python_wheels:
+    name: Python wheels on ${{ matrix.os }} with ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -18,7 +19,7 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
       PIP_DOWNLOAD_CACHE: ${{ github.workspace }}/../.pip_download_cache
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ubuntu-20.04]
         python-version: [3.6, 3.7, 3.8, 3.9]
@@ -45,16 +46,16 @@ jobs:
         sudo add-apt-repository -y -s ppa:nerdboy/embedded
         sudo apt-get install -y libre2-dev ninja-build cmake
 
-    - name: Test pip dev install
+    - name: Test using pip dev install
       run: |
         tox
       env:
         PLATFORM: ${{ matrix.os }}
 
-    - name: Build dist pkgs
+    - name: Build sdist and wheel pkgs
       run: |
         tox -e deploy
 
-    - name: Check wheel
+    - name: Test using built wheel
       run: |
         tox -e check
