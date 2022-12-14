@@ -42,6 +42,12 @@ class CMakeBuild(build_ext):
         else:
             cfg = os.environ.get("CMAKE_BUILD_OVERRIDE", "")
 
+        # Set a coverage flag if provided
+        if "WITH_COVERAGE" not in os.environ:
+            coverage = "OFF"
+        else:
+            coverage = os.environ.get("WITH_COVERAGE", "")
+
         # CMake lets you override the generator - we need to check this.
         # Can be set with Conda-Build, for example.
         cmake_generator = os.environ.get("CMAKE_GENERATOR", "")
@@ -53,6 +59,7 @@ class CMakeBuild(build_ext):
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(extdir),
             "-DPYTHON_EXECUTABLE={}".format(sys.executable),
             "-DSCM_VERSION_INFO={}".format(__version__),
+            "-DWITH_COVERAGE={}".format(coverage),
             "-DCMAKE_BUILD_TYPE={}".format(cfg),  # not used on MSVC, but no harm
         ]
         build_args = ["--verbose"]

@@ -1,5 +1,19 @@
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+option(WITH_COVERAGE "Enable coverage" OFF)
+
+# Cython flags must be set before we run find_package for Cython since the
+# compiler command is created immediately.
+set(CYTHON_FLAGS
+    "-X binding=True,boundscheck=False,embedsignature=True"
+    CACHE STRING "The directives for Cython compilation.")
+
+if(WITH_COVERAGE)
+  set(CYTHON_FLAGS
+      "${CYTHON_FLAGS},linetrace=True"
+      CACHE STRING "The directives for Cython compilation." FORCE)
+endif()
+
 find_package(Cython REQUIRED)
 
 set(cython_module re2)
@@ -7,6 +21,7 @@ set(cython_module re2)
 set(re2_include_dir "${PROJECT_SOURCE_DIR}/src")
 set(cython_output "${CMAKE_CURRENT_SOURCE_DIR}/${cython_module}.cpp")
 set(cython_src ${cython_module}.pyx)
+
 # Track cython sources
 file(GLOB cy_srcs *.pyx *.pxi *.h)
 
@@ -16,6 +31,7 @@ add_custom_command(OUTPUT ${cython_output}
                            -a -3
                            --fast-fail
                            --cplus -I ${re2_include_dir}
+                           ${CYTHON_FLAGS}
                            --output-file ${cython_output} ${cython_src}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                    DEPENDS ${cy_srcs}
@@ -31,6 +47,13 @@ target_include_directories(${cython_module} PUBLIC
                            ${PYTHON_INCLUDE_DIRS})
 
 target_compile_definitions(${cython_module} PRIVATE VERSION_INFO=${SCM_VERSION_INFO})
+
+if(WITH_COVERAGE)
+  message(STATUS "Coverage enabled via CYTHON_TRACE defines")
+  target_compile_definitions(
+    ${cython_module}  # Enable line tracing for coverage if requested.
+    PRIVATE CYTHON_TRACE=1 CYTHON_TRACE_NOGIL=1)
+endif()
 
 # here we get to jump through some hoops to find libre2 on the manylinux
 # docker CI images, etc

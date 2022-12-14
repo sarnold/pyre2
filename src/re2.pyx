@@ -1,4 +1,4 @@
-# cython: infer_types(False)
+# -*- coding: utf-8 -*-
 r"""Regular expressions using Google's RE2 engine.
 
 Compared to Python's ``re``, the RE2 engine compiles regular expressions to
@@ -102,12 +102,14 @@ This module also defines an exception 'RegexError' (also available under the
 alias 'error').
 
 """
+# cython: infer_types=True
 
 include "includes.pxi"
 
 import re
 import sys
 import warnings
+
 from re import error as RegexError
 
 error = re.error

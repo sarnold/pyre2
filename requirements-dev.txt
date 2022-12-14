@@ -3,4 +3,3 @@ bandit
 pytest
 pytest-cov
 coverage
-coverage_python_version

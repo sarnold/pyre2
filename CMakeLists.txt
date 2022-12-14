@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.15...3.18)
 
 project(re2 LANGUAGES CXX C)
 
+option(WITH_COVERAGE "Enable coverage" OFF)
 option(PY_DEBUG "Set if python being linked is a Py_DEBUG build" OFF)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -16,6 +17,11 @@ endif()
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING
             "Default build type: RelWithDebInfo" FORCE)
+endif()
+
+if(WITH_COVERAGE)
+    add_compile_options(--coverage)
+    add_link_options(--coverage -lgcov)
 endif()
 
 include(GNUInstallDirs)
