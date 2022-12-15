@@ -15,17 +15,17 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
       PIP_DOWNLOAD_CACHE: ${{ github.workspace }}/../.pip_download_cache
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ubuntu-20.04]
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.7, 3.8, 3.9, '3.10', '3.11']
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - uses: actions/setup-python@v2
+    - uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -46,10 +46,6 @@ jobs:
       run: |
         tox -e dev
 
-    - name: Build dist pkgs
+    - name: Build and check pkgs
       run: |
-        tox -e deploy
-
-    - name: Check wheel
-      run: |
-        tox -e check
+        tox -e build,check

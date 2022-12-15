@@ -92,7 +92,7 @@ You can pass some cmake environment variables to alter the build type or
 pass a toolchain file (the latter is required on Windows) or specify the
 cmake generator.  For example::
 
-  $ CMAKE_GENERATOR="Unix Makefiles" CMAKE_TOOLCHAIN_FILE=clang_toolchain.cmake tox -e deploy
+  $ CMAKE_GENERATOR="Unix Makefiles" CMAKE_TOOLCHAIN_FILE=clang_toolchain.cmake tox -e build
 
 For development, get the source::
 
