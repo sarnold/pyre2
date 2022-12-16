@@ -1,4 +1,4 @@
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(cython_module re2)
 
 option(WITH_COVERAGE "Enable coverage" OFF)
 
@@ -15,8 +15,6 @@ if(WITH_COVERAGE)
 endif()
 
 find_package(Cython REQUIRED)
-
-set(cython_module re2)
 
 set(re2_include_dir "${PROJECT_SOURCE_DIR}/src")
 set(cython_output "${CMAKE_CURRENT_SOURCE_DIR}/${cython_module}.cpp")
@@ -46,13 +44,20 @@ set_target_properties(${cython_module}
 target_include_directories(${cython_module} PUBLIC
                            ${PYTHON_INCLUDE_DIRS})
 
-target_compile_definitions(${cython_module} PRIVATE VERSION_INFO=${SCM_VERSION_INFO})
+target_compile_definitions(${cython_module} PRIVATE
+                           VERSION_INFO=${SCM_VERSION_INFO})
 
 if(WITH_COVERAGE)
   message(STATUS "Coverage enabled via CYTHON_TRACE defines")
   target_compile_definitions(
     ${cython_module}  # Enable line tracing for coverage if requested.
     PRIVATE CYTHON_TRACE=1 CYTHON_TRACE_NOGIL=1)
+
+  # Copy build target for coverage
+  add_custom_command(
+    DEPENDS ${cython_module}
+    COMMAND "${CMAKE_COMMAND}" -E copy "${PROJECT_BINARY_DIR}/${cython_module}" "${CMAKE_CURRENT_SOURCE_DIR}"
+    OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/${cython_module}")
 endif()
 
 # here we get to jump through some hoops to find libre2 on the manylinux

@@ -1,14 +1,18 @@
 from __future__ import print_function
-try:
-    from test.test_support import verbose
-except ImportError:
-    from test.support import verbose
-import re2 as re
-from re import Scanner
+
 import os
 import sys
 import traceback
 from weakref import proxy
+
+try:
+    from test.test_support import verbose
+except ImportError:
+    from test.support import verbose
+
+import re2 as re
+from re import Scanner
+
 if sys.version_info[0] > 2:
     unicode = str
     unichr = chr
@@ -20,7 +24,7 @@ if sys.version_info[0] > 2:
 # cover most of the code.
 
 import unittest
-import pytest
+#import pytest
 
 class ReTests(unittest.TestCase):
 
@@ -264,8 +268,8 @@ class ReTests(unittest.TestCase):
                          (None, 'b', None))
         self.assertEqual(pat.match('ac').group(1, 'b2', 3), ('a', None, 'c'))
 
-    @pytest.mark.subscript
-    def test_re_match_subscript(self):  # fails using gh pythons
+    #@pytest.mark.subscript
+    def test_re_match_subscript(self):
         # A single group
         m = re.match('(a)', 'a')
         self.assertEqual(m[0], 'a')

@@ -1,5 +1,5 @@
-Cython
-bandit
+cython>=0.29.32
 pytest
 pytest-cov
 coverage
+coverage_python_version

@@ -1,8 +1,5 @@
-cmake_minimum_required(VERSION 3.15...3.18)
+cmake_minimum_required(VERSION 3.18)
 
-project(re2 LANGUAGES CXX C)
-
-option(WITH_COVERAGE "Enable coverage" OFF)
 option(PY_DEBUG "Set if python being linked is a Py_DEBUG build" OFF)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -19,12 +16,28 @@ if(NOT CMAKE_BUILD_TYPE)
             "Default build type: RelWithDebInfo" FORCE)
 endif()
 
-if(WITH_COVERAGE)
-    add_compile_options(--coverage)
-    add_link_options(--coverage -lgcov)
+if(NOT SCM_VERSION_INFO)
+        # use git describe for scm_version
+        EXECUTE_PROCESS(COMMAND git describe --tags
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                        OUTPUT_VARIABLE SCM_VERSION_INFO
+                        OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
+project(re2 LANGUAGES C CXX VERSION ${SCM_VERSION_INFO})
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_VERBOSE_MAKEFILE ON)  # this does nothing with ninja :/
+#set(CMAKE_VERBOSE_BUILD ON)  # this also does nothing with ninja :/
+
+message(STATUS "Trying ${CMAKE_BUILD_TYPE} build type for pyre2 ${SCM_VERSION_INFO}")
+
 include(GNUInstallDirs)
+include(CheckIncludeFile)
+include(CheckIncludeFileCXX)
+include(CheckIncludeFiles)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 find_package(pybind11 CONFIG)
 
@@ -38,7 +51,7 @@ else()
   FetchContent_Declare(
     pybind11
     GIT_REPOSITORY https://github.com/pybind/pybind11
-    GIT_TAG v2.6.1
+    GIT_TAG v2.7.1
   )
   FetchContent_MakeAvailable(pybind11)
 endif()
@@ -49,9 +62,5 @@ if (${PYTHON_IS_DEBUG})
   set(PY_DEBUG ON)
 endif()
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
-    ${PROJECT_SOURCE_DIR}/cmake/modules/)
-
 include_directories(${PROJECT_SOURCE_DIR}/src)
-
 add_subdirectory(src)

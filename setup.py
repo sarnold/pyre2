@@ -2,6 +2,7 @@
 #
 
 import os
+import re
 import sys
 import subprocess
 
@@ -64,6 +65,10 @@ class CMakeBuild(build_ext):
         ]
         build_args = ["--verbose"]
 
+        # Add CMake arguments set as environment variable
+        if "CMAKE_ARGS" in os.environ:
+            cmake_args += [item for item in os.environ["CMAKE_ARGS"].split(" ") if item]
+
         # CMake also lets you provide a toolchain file.
         # Can be set in CI build environments for example.
         cmake_toolchain_file = os.environ.get("CMAKE_TOOLCHAIN_FILE", "")
@@ -77,7 +82,12 @@ class CMakeBuild(build_ext):
             # Users can override the generator with CMAKE_GENERATOR in CMake
             # 3.15+.
             if not cmake_generator:
-                cmake_args += ["-GNinja"]
+                try:
+                    import ninja  # noqa: F401
+
+                    cmake_args += ["-GNinja"]
+                except ImportError:
+                    pass
 
         else:
 
@@ -99,6 +109,12 @@ class CMakeBuild(build_ext):
                     "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir)
                 ]
                 build_args += ["--config", cfg]
+
+        if sys.platform.startswith("darwin"):
+            # Cross-compile support for macOS - respect ARCHFLAGS if set
+            archs = re.findall(r"-arch (\S+)", os.environ.get("ARCHFLAGS", ""))
+            if archs:
+                cmake_args += ["-DCMAKE_OSX_ARCHITECTURES={}".format(";".join(archs))]
 
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
         # across all generators.
