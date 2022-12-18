@@ -16,8 +16,15 @@ testpaths = [
     "tests",
 ]
 doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE",]
-addopts = "--strict-markers"
 markers = "subscript"
+norecursedirs= [
+    ".*", "*.egg*", "build", "dist", "conda-recipe",
+]
+addopts = [
+    "--strict-markers",
+    "--tb=native",
+    "-ra",
+]
 
 [tool.coverage.run]
 plugins = ["Cython.Coverage"]
@@ -29,8 +36,9 @@ omit = ["tests", ".tox"]
 source = ["src"]
 
 [tool.coverage.report]
-fail_under = 50
+#fail_under = 50
 show_missing = true
+omit = ["tests", ".tox"]
 
 [tool.black]
 line-length = 84
