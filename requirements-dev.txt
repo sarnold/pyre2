@@ -1,5 +1,5 @@
 Cython~=3.0.0a11
-#cython-coverage
+cython-coverage
 pytest
 pytest-cov
 coverage

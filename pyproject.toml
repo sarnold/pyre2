@@ -2,9 +2,9 @@
 requires = [
     "setuptools>=42",
     "wheel",
-    "Cython~=0.29.30",
+    "Cython~=3.0.0a11",
     "pybind11>=2.7.1",
-    "ninja; sys_platform != 'win32' and platform_machine != 'arm64'",
+    "ninja; sys_platform != 'win32'",
     "cmake>=3.15",
 ]
 

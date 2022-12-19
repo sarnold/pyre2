@@ -31,7 +31,8 @@ jobs:
           # configure cibuildwheel to build native archs ('auto'), and some
           # emulated ones, plus cross-compile on macos
           CIBW_ARCHS_LINUX: auto aarch64
-          CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_ARCHS_MACOS: auto arm64
+          CIBW_TEST_SKIP: "*_arm64 *universal2:arm64 *linux_i686"
           CIBW_ARCHS_WINDOWS: auto64
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
           CIBW_MANYLINUX_I686_IMAGE: manylinux2010
@@ -41,13 +42,13 @@ jobs:
             yum -y install epel-release && yum install -y re2-devel ninja-build
           CIBW_BEFORE_ALL_MACOS: >
             brew install re2 pybind11 ninja
-          CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=10.14
+          #CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=10.14
           CIBW_BEFORE_ALL_WINDOWS: >
             vcpkg install re2:x64-windows
             && vcpkg integrate install
           CIBW_ENVIRONMENT_WINDOWS: 'CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake'
-          CIBW_TEST_SKIP: "*-macosx_arm64"
-          CIBW_TEST_COMMAND: python -c "import re2"
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: pytest -v {package}/tests/test_re.py
 
       - uses: actions/upload-artifact@v3
         with:
