@@ -5,13 +5,14 @@ import sys
 import traceback
 from weakref import proxy
 
-try:
-    from test.test_support import verbose
-except ImportError:
-    from test.support import verbose
-
 import re2 as re
 from re import Scanner
+
+try:
+    from test import support
+    from test.support import verbose
+except ImportError:  # import error on Windows
+    verbose = re.VERBOSE
 
 if sys.version_info[0] > 2:
     unicode = str
@@ -818,3 +819,7 @@ def test_re_suite():
                 result = obj.search(s)
                 if result is None:
                     print('=== Fails on unicode-sensitive match', t)
+
+
+if __name__ == '__main__':
+    unittest.main()

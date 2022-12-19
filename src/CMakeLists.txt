@@ -5,7 +5,7 @@ option(WITH_COVERAGE "Enable coverage" OFF)
 # Cython flags must be set before we run find_package for Cython since the
 # compiler command is created immediately.
 set(CYTHON_FLAGS
-    "-X binding=True,boundscheck=False,embedsignature=True"
+    "-X binding=True,boundscheck=False,embedsignature=True,language_level=3"
     CACHE STRING "The directives for Cython compilation.")
 
 if(WITH_COVERAGE)
