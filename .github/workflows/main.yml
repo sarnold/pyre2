@@ -23,7 +23,7 @@ jobs:
       - uses: actions/setup-python@v4
         name: Install Python
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
       - name: Prepare compiler environment for Windows
         if: runner.os == 'Windows'
@@ -38,23 +38,26 @@ jobs:
 
       - name: Build wheels
         env:
-          CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux2010_x86_64:latest
-          CIBW_MANYLINUX_I686_IMAGE: quay.io/pypa/manylinux2010_i686:latest
-          CIBW_BUILD: cp36-* cp37-* cp38-* cp39-*
-          CIBW_SKIP: "*-win32"
+          CIBW_BUILD: cp36-* cp37-* cp38-* cp39-* cp310-* cp311-*
+          CIBW_ARCHS_MACOS: universal2
+          CIBW_ARCHS_LINUX: auto64
+          CIBW_ARCHS_WINDOWS: auto64
+          CIBW_SKIP: "*musllinux*"
+          CIBW_TEST_SKIP: "*-macosx_universal2:arm64"
           CIBW_BEFORE_ALL_LINUX: >
             yum -y -q --enablerepo=extras install epel-release
             && yum install -y re2-devel ninja-build
-          CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel show {wheel} && auditwheel repair -w {dest_dir} {wheel}"
+          #CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel show {wheel} && auditwheel repair -w {dest_dir} {wheel}"
           CIBW_BEFORE_ALL_MACOS: >
             brew install re2 pybind11 ninja
-          CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=10.09
-          CIBW_REPAIR_WHEEL_COMMAND_MACOS: "pip uninstall -y delocate && pip install git+https://github.com/Chia-Network/delocate.git && delocate-listdeps {wheel} && delocate-wheel -w {dest_dir} -v {wheel}"
+          CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=10.15
+          #CIBW_REPAIR_WHEEL_COMMAND_MACOS: "pip uninstall -y delocate && pip install git+https://github.com/Chia-Network/delocate.git && delocate-listdeps {wheel} && delocate-wheel -w {dest_dir} -v {wheel}"
           CIBW_BEFORE_ALL_WINDOWS: >
             vcpkg install re2:x64-windows
             && vcpkg integrate install
           CIBW_ENVIRONMENT_WINDOWS: 'CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake'
-          CIBW_TEST_COMMAND: python -c "import re2"
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: pytest -v {package}/tests/test_re.py
         run: |
           python -m cibuildwheel --output-dir wheelhouse
 

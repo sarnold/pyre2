@@ -19,6 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - uses: actions/setup-python@v4
+        name: Install Python
+        with:
+          python-version: '3.10'
+
       - name: Set up QEMU
         if: runner.os == 'Linux'
         uses: docker/setup-qemu-action@v2
@@ -36,8 +41,8 @@ jobs:
           CIBW_ARCHS_WINDOWS: auto64
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
           CIBW_MANYLINUX_I686_IMAGE: manylinux2010
-          CIBW_BUILD: cp37-* cp38-* cp39-* cp310-*
-          CIBW_SKIP: "*musllinux*"
+          CIBW_BUILD: cp37-* cp38-* cp39-* cp310-* cp311-*
+          CIBW_SKIP: "*musllinux* cp311-*i686"
           CIBW_BEFORE_ALL_LINUX: >
             yum -y install epel-release && yum install -y re2-devel ninja-build
           CIBW_BEFORE_ALL_MACOS: >
