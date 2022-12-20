@@ -1,3 +1,5 @@
+cmake
+ninja
 Cython~=3.0.0a11
 cython-coverage
 pytest

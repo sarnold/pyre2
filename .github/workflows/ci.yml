@@ -16,15 +16,14 @@ jobs:
         shell: bash
     env:
       OS: ${{ matrix.os }}
-      CI_FAIL: tests/test_emptygroups_none.txt::test_emptygroups_none.txt
       PYTHON: ${{ matrix.python-version }}
       PYTHONIOENCODING: utf-8
       PIP_DOWNLOAD_CACHE: ${{ github.workspace }}/../.pip_download_cache
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04]
-        python-version: [3.7, 3.8, 3.9, '3.10']
+        os: [ubuntu-22.04]
+        python-version: [3.7, 3.8, 3.9, '3.10', '3.11']
 
     steps:
     - uses: actions/checkout@v3
@@ -41,16 +40,13 @@ jobs:
         pip install tox tox-gh-actions
 
     - name: Install Ubuntu build deps
-      if: runner.os == 'Linux'
       run: |
         sudo apt-get -qq update
-        sudo apt-get install -y software-properties-common
-        sudo add-apt-repository -y -s ppa:nerdboy/embedded
-        sudo apt-get install -y libre2-dev ninja-build cmake
+        sudo apt-get install -y libre2-dev
 
-    - name: Test using pip dev install
+    - name: Test using pip install
       run: |
-        tox -- --deselect ${{ env.CI_FAIL }}
+        tox
       env:
         PLATFORM: ${{ matrix.os }}
 

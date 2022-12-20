@@ -24,20 +24,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Configure cache
-      id: cache
-      uses: actions/cache@v3
-      env:
-        # Increase this value to reset cache and rebuild the env during the PR
-        CACHE_NUMBER: 2
-      with:
-        path: |
-          **/build
-          **/ccache
-          ~/conda_pkgs_dir
-        key:
-          ${{ runner.os }}-${{ matrix.python-version }}-${{ github.ref }}-${{ env.CACHE_NUMBER }}
-
     - uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
@@ -45,6 +31,20 @@ jobs:
         channels: conda-forge
         channel-priority: strict
         use-only-tar-bz2: true
+
+    - name: Cache conda packages
+      id: cache
+      uses: actions/cache@v3
+      env:
+        # Increase this value to reset cache and rebuild the env during the PR
+        CACHE_NUMBER: 2
+      with:
+          path: /home/runner/conda_pkgs_dir
+          key:
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-python-${{ matrix.python }}-${{hashFiles('environment.devenv.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-python-${{ matrix.python }}-
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-
 
     - name: Configure condadev environment
       shell: bash -l {0}
