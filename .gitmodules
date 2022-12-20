@@ -1,0 +1,3 @@
+[submodule "libre2"]
+	path = libre2
+	url = https://github.com/google/re2.git
