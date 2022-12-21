@@ -60,6 +60,7 @@ jobs:
       shell: bash -l {0}
       env:
         PY_VER: ${{ matrix.python-version }}
+        HAVE_LIBRE2_PKG: TRUE
       run: |
         source activate pyre2
         python -m pip install .[test] -vv

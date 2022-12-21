@@ -35,6 +35,13 @@ add_custom_command(OUTPUT ${cython_output}
                    DEPENDS ${cy_srcs}
                    COMMENT "Cythonizing extension ${cython_src}")
 
+if(USE_GIT_SUBMODULE)
+  # use the local git submodule
+  set(RE2_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libre2")
+  list(APPEND cython_output ${RE2_SOURCES})
+  include_directories(${RE2_INCLUDE_DIR})
+endif()
+
 add_library(${cython_module} MODULE ${cython_output})
 
 set_target_properties(${cython_module}
@@ -60,27 +67,14 @@ if(WITH_COVERAGE)
     OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/${cython_module}")
 endif()
 
-# here we get to jump through some hoops to find libre2 on the manylinux
-# docker CI images, etc
-find_package(re2 CONFIG NAMES re2)
-
 if(re2_FOUND)
-  message(STATUS "System re2 found")
+  #include_directories(${re2_INCLUDE_DIRS})
+  target_include_directories(${cython_module} PUBLIC ${re2_INCLUDE_DIRS})
   target_link_libraries(${cython_module} PRIVATE re2::re2)
-elseif(NOT MSVC)
-  message(STATUS "Trying PkgConfig")
-  find_package(PkgConfig REQUIRED)
-  pkg_check_modules(RE2 IMPORTED_TARGET re2)
-
-  if(RE2_FOUND)
-    include_directories(${RE2_INCLUDE_DIRS})
-    target_link_libraries(${cython_module} PRIVATE PkgConfig::RE2)
-  else()
-    # last resort for manylinux: just try it
-    message(STATUS "Blindly groping instead")
-    link_directories("/usr/lib64" "/usr/lib")
-    target_link_libraries(${cython_module} PRIVATE "libre2.so")
-  endif()
+elseif(RE2_FOUND)
+  #include_directories(${RE2_INCLUDE_DIRS})
+  target_include_directories(${cython_module} PUBLIC ${RE2_INCLUDE_DIRS})
+  target_link_libraries(${cython_module} PRIVATE PkgConfig::RE2)
 endif()
 
 if(APPLE)

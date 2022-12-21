@@ -1,6 +1,20 @@
 cmake_minimum_required(VERSION 3.18)
 
+if(POLICY CMP0077)
+    cmake_policy(SET CMP0077 NEW) # option() honors variables already set
+endif()
+
 option(PY_DEBUG "Set if python being linked is a Py_DEBUG build" OFF)
+option(USE_GIT_SUBMODULE "Use submodules during build" ON)
+option(USE_LIBRE2_PKG "Use OS-provided libdatrie package" OFF)
+
+if(DEFINED ENV{HAVE_LIBRE2_PKG})
+  set(USE_LIBRE2_PKG "$ENV{HAVE_LIBRE2_PKG}")
+endif()
+
+if(USE_LIBRE2_PKG)
+  set(USE_GIT_SUBMODULE OFF)
+endif()
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -38,6 +52,41 @@ include(CheckIncludeFileCXX)
 include(CheckIncludeFiles)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+
+if(USE_LIBRE2_PKG)
+  message(STATUS "Trying system re2")
+  find_package(re2 CONFIG NAMES re2)
+endif()
+
+if(USE_LIBRE2_PKG AND NOT re2_FOUND)
+  message(STATUS "Trying PkgConfig")
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(RE2 IMPORTED_TARGET re2)
+endif()
+
+if(USE_GIT_SUBMODULE)
+  message(STATUS "Trying libre2 submodule")
+  find_package(Git)
+  if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+    message(STATUS "Checking submodule state")
+    # Update submodules as needed
+    if(NOT EXISTS "${PROJECT_SOURCE_DIR}/libre2/re2.pc.in")
+      message(STATUS "Submodule update")
+      execute_process(
+        COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        RESULT_VARIABLE GIT_SUBMOD_RESULT
+      )
+      if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+        message(
+          FATAL_ERROR
+            "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules"
+          )
+      endif()
+    endif()
+  endif()
+  include(${CMAKE_SOURCE_DIR}/cmake/libre2sub.cmake)
+endif()
 
 find_package(pybind11 CONFIG)
 
