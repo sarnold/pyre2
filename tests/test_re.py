@@ -690,9 +690,9 @@ class ReTests(unittest.TestCase):
 
 def test_re_suite():
     try:
-        from tests.re_utils import benchmarks, tests, SUCCEED, FAIL, SYNTAX_ERROR
+        from tests.re_utils import tests, SUCCEED, FAIL, SYNTAX_ERROR
     except ImportError:
-        from re_utils import benchmarks, tests, SUCCEED, FAIL, SYNTAX_ERROR
+        from re_utils import tests, SUCCEED, FAIL, SYNTAX_ERROR
 
     if verbose:
         print('\nRunning test_re_suite ...')
