@@ -11,7 +11,7 @@ from setuptools.command.build_ext import build_ext
 
 
 # update the release version both here and in conda.recipe/meta.yaml
-__version__ = '0.3.6'
+__version__ = '0.3.7'
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
@@ -58,7 +58,7 @@ class CMakeBuild(build_ext):
         # from Python.
         cmake_args = [
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(extdir),
-            "-DPYTHON_EXECUTABLE={}".format(sys.executable),
+            "-DPython_EXECUTABLE={}".format(sys.executable),
             "-DSCM_VERSION_INFO={}".format(__version__),
             "-DWITH_COVERAGE={}".format(coverage),
             "-DCMAKE_BUILD_TYPE={}".format(cfg),  # not used on MSVC, but no harm

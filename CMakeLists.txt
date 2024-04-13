@@ -88,7 +88,8 @@ if(USE_GIT_SUBMODULE)
   include(${CMAKE_SOURCE_DIR}/cmake/libre2sub.cmake)
 endif()
 
-find_package(pybind11 CONFIG)
+set(PYBIND11_FINDPYTHON ON)
+find_package(pybind11)
 
 if(pybind11_FOUND)
   message(STATUS "System pybind11 found")
@@ -100,7 +101,7 @@ else()
   FetchContent_Declare(
     pybind11
     GIT_REPOSITORY https://github.com/pybind/pybind11
-    GIT_TAG v2.7.1
+    GIT_TAG v2.11.1
   )
   FetchContent_MakeAvailable(pybind11)
 endif()

@@ -10,7 +10,7 @@ set(CYTHON_FLAGS
 
 if(WITH_COVERAGE)
   set(CYTHON_FLAGS
-      "${CYTHON_FLAGS},linetrace=True"
+      "${CYTHON_FLAGS},profile=True,linetrace=True"
       CACHE STRING "The directives for Cython compilation." FORCE)
 endif()
 
@@ -49,7 +49,7 @@ set_target_properties(${cython_module}
                       SUFFIX "${PYTHON_MODULE_EXTENSION}")
 
 target_include_directories(${cython_module} PUBLIC
-                           ${PYTHON_INCLUDE_DIRS})
+                           ${Python_INCLUDE_DIRS})
 
 target_compile_definitions(${cython_module} PRIVATE
                            VERSION_INFO=${SCM_VERSION_INFO})
@@ -85,6 +85,6 @@ endif()
 
 if(MSVC)
   target_compile_options(${cython_module} PRIVATE /utf-8)
-  target_link_libraries(${cython_module} PRIVATE ${PYTHON_LIBRARIES})
+  target_link_libraries(${cython_module} PRIVATE ${Python_LIBRARIES})
   target_link_libraries(${cython_module} PRIVATE pybind11::windows_extras)
 endif()
