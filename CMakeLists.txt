@@ -73,7 +73,7 @@ if(USE_GIT_SUBMODULE)
     if(NOT EXISTS "${PROJECT_SOURCE_DIR}/libre2/re2.pc.in")
       message(STATUS "Submodule update")
       execute_process(
-        COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+        COMMAND ${GIT_EXECUTABLE} submodule update --init
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         RESULT_VARIABLE GIT_SUBMOD_RESULT
       )
