@@ -6,7 +6,8 @@ endif()
 
 option(PY_DEBUG "Set if python being linked is a Py_DEBUG build" OFF)
 option(USE_GIT_SUBMODULE "Use submodules during build" ON)
-option(USE_LIBRE2_PKG "Use OS-provided libdatrie package" OFF)
+option(USE_LIBRE2_PKG "Use OS-provided libre2 package" OFF)
+option(USE_PYBIND11_PKG "Use OS-provided pybind11 package" OFF)
 
 if(DEFINED ENV{HAVE_LIBRE2_PKG})
   set(USE_LIBRE2_PKG "$ENV{HAVE_LIBRE2_PKG}")
@@ -88,12 +89,21 @@ if(USE_GIT_SUBMODULE)
   include(${CMAKE_SOURCE_DIR}/cmake/libre2sub.cmake)
 endif()
 
-set(PYBIND11_FINDPYTHON ON)
-find_package(pybind11)
+# get rid of FindPython old warnings, refactor FindCython module
+set(CMP0148 NEW)
+
+if(USE_PYBIND11_PKG)
+  message(STATUS "Trying system re2")
+  set(PYBIND11_FINDPYTHON ON)
+  find_package(pybind11)
+endif()
 
 if(pybind11_FOUND)
   message(STATUS "System pybind11 found")
-else()
+endif()
+
+
+if(NOT USE_PYBIND11_PKG)
   message(STATUS "Fetching pybind11 from github")
   # Fetch pybind11
   include(FetchContent)

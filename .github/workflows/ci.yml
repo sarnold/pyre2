@@ -43,7 +43,7 @@ jobs:
     - name: Install Ubuntu build deps
       run: |
         sudo apt-get -qq update
-        sudo apt-get install -y libre2-dev
+        sudo apt-get install -y libre2-dev python3-pybind11
 
     - name: Test using pip install
       run: |

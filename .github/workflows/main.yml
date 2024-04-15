@@ -36,7 +36,8 @@ jobs:
           CIBW_SKIP: "*musllinux* cp3{6,7}-macosx_universal2"
           CIBW_TEST_SKIP: "*-macosx_universal2:arm64"
           CIBW_TEST_REQUIRES: ''
-          CIBW_TEST_COMMAND:
+          CIBW_TEST_COMMAND: ''
+          USE_PYBIND11_PKG: OFF
 
       - uses: actions/upload-artifact@v3
         with:
