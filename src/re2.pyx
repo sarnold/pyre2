@@ -1,5 +1,5 @@
 # cython: infer_types(False)
-r"""Regular expressions using Google's RE2 engine.
+"""Regular expressions using Google's RE2 engine.
 
 Compared to Python's ``re``, the RE2 engine compiles regular expressions to
 deterministic finite automata, which guarantees linear-time behavior.
@@ -103,12 +103,12 @@ alias 'error').
 
 """
 
-include "includes.pxi"
-
 import re
 import sys
 import warnings
 from re import error as RegexError
+
+include "includes.pxi"
 
 error = re.error
 

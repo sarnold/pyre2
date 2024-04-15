@@ -1,5 +1,6 @@
 global-include CMakeLists.txt *.cmake
 include AUTHORS README.rst HISTORY CHANGELOG.rst LICENSE
+graft libre2
 graft src
 graft tests
 global-exclude *.py[cod] __pycache__

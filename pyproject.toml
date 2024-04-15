@@ -2,16 +2,68 @@
 requires = [
     "setuptools>=42",
     "wheel",
-    "Cython>=0.20",
-    "pybind11>=2.6.0",
-    "ninja; sys_platform != 'Windows'",
+    "Cython>=3.0.0a11",
+    "pybind11>=2.7.1",
+    "ninja; sys_platform != 'win32'",
     "cmake>=3.15",
 ]
 
 build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
-minversion = "6.0"
+minversion = "6.2.5"
 testpaths = [
     "tests",
 ]
+doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE",]
+markers = "subscript"
+norecursedirs= [
+    ".*", "*.egg*", "build", "dist", "conda-recipe",
+]
+addopts = [
+    "--strict-markers",
+    "--tb=native",
+    "-ra",
+]
+
+[tool.coverage.run]
+plugins = ["Cython.Coverage"]
+branch = true
+source = ["src"]
+
+[tool.coverage.paths]
+source = [
+    "src",
+    ".tox/*/lib/*/site-packages/",
+]
+
+[tool.coverage.report]
+#fail_under = 50
+show_missing = true
+ignore_errors = true
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "raise AssertionError",
+    "if typing.TYPE_CHECKING:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.black]
+line-length = 84
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | tests
+)/
+'''

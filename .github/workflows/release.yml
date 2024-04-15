@@ -15,14 +15,14 @@ jobs:
         os: [ubuntu-20.04, macos-latest, windows-latest]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v5
         name: Install Python
         with:
-          python-version: '3.8'
+          python-version: '3.10'
 
       - name: Prepare compiler environment for Windows
         if: runner.os == 'Windows'
@@ -37,27 +37,30 @@ jobs:
 
       - name: Build wheels
         env:
-          CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux2010_x86_64:latest
-          CIBW_MANYLINUX_I686_IMAGE: quay.io/pypa/manylinux2010_i686:latest
-          CIBW_BUILD: cp36-* cp37-* cp38-* cp39-*
-          CIBW_SKIP: "*-win32"
+          CIBW_BUILD: cp36-* cp37-* cp38-* cp39-* cp310-* cp311-*
+          CIBW_ARCHS_MACOS: universal2
+          CIBW_ARCHS_LINUX: auto64
+          CIBW_ARCHS_WINDOWS: auto64
+          CIBW_SKIP: "*musllinux*"
+          CIBW_TEST_SKIP: "*-macosx_universal2:arm64"
           CIBW_BEFORE_ALL_LINUX: >
             yum -y -q --enablerepo=extras install epel-release
             && yum install -y re2-devel ninja-build
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel show {wheel} && auditwheel repair -w {dest_dir} {wheel}"
           CIBW_BEFORE_ALL_MACOS: >
             brew install re2 pybind11 ninja
-          CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=10.09
+          CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=10.15
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: "pip uninstall -y delocate && pip install git+https://github.com/Chia-Network/delocate.git && delocate-listdeps {wheel} && delocate-wheel -w {dest_dir} -v {wheel}"
           CIBW_BEFORE_ALL_WINDOWS: >
             vcpkg install re2:x64-windows
             && vcpkg integrate install
           CIBW_ENVIRONMENT_WINDOWS: 'CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake'
-          CIBW_TEST_COMMAND: python -c "import re2"
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: pytest -v {package}/tests/test_re.py
         run: |
           python -m cibuildwheel --output-dir wheelhouse
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           path: ./wheelhouse/*.whl
 
@@ -65,19 +68,19 @@ jobs:
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v5
         name: Install Python
         with:
-          python-version: '3.8'
+          python-version: '3.11'
 
       - name: Build sdist
         run: |
-          pip install pep517
-          python -m pep517.build -s .
+          pip install build
+          python -m build -s .
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           path: dist/*.tar.gz
 
@@ -92,26 +95,27 @@ jobs:
           echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
           echo ${{ env.VERSION }}
 
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v5
         name: Install Python
         with:
-          python-version: 3.7
+          python-version: '3.10'
 
       # download all artifacts to project dir
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
 
       - name: Generate changes file
         uses: sarnold/gitchangelog-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN}}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create draft release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -121,11 +125,10 @@ jobs:
           draft: false
           prerelease: false
           # uncomment below to upload wheels to github releases
-          files: dist/cibw-wheels/pyre2*.whl
+          files: dist/cibw-wheels/pyre2-*.whl
 
-      - uses: pypa/gh-action-pypi-publish@master
-        if: ${{ github.actor == github.repository_owner && github.ref == 'refs/heads/master' }}
-        with:
-          user: __token__
-          password: ${{ secrets.pypi_password }}
-          packages_dir: artifact/
+      #- uses: pypa/gh-action-pypi-publish@release/v1
+        #if: ${{ github.actor == github.repository_owner && startsWith(github.ref, 'refs/tags') }}
+        #with:
+          #password: ${{ secrets.pypi_password }}
+          #packages_dir: artifact/
