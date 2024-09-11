@@ -106,8 +106,9 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
+          merge-multiple: true
           path: artifacts
 
       # note wheels should be in subdirectories named <artifact_name>
       - name: Check number of downloaded artifacts
-        run: ls -l artifacts/*
+        run: ls -l artifacts/

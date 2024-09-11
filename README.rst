@@ -18,8 +18,8 @@
    :target: https://badge.fury.io/py/pyre2
     :alt: Pypi version
 
-.. image:: https://github.com/andreasvc/pyre2/workflows/Conda/badge.svg
-    :target: https://github.com/andreasvc/pyre2/actions?query=workflow:Conda
+.. image:: https://github.com/andreasvc/pyre2/actions/workflows/conda-dev.yml/badge.svg
+    :target: https://github.com/andreasvc/pyre2/actions/workflows/conda-dev.yml
     :alt: Conda CI Status
 
 .. image:: https://img.shields.io/github/license/andreasvc/pyre2
