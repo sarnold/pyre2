@@ -55,15 +55,7 @@ jobs:
       run: |
         conda config --set always_yes yes --set changeps1 no
         conda config --add channels conda-forge
-        conda install -n base conda-devenv
-        echo "=== conda info ==="
-        conda info
-        echo "=== which conda-devenv ==="
-        which conda-devenv || echo "not on PATH"
-        echo "=== find conda-devenv binary ==="
-        find $CONDA -name "conda-devenv" 2>/dev/null
-        echo "=== PATH ==="
-        echo $PATH
+        conda install conda-devenv
         conda-devenv
 
     - name: Build and test
