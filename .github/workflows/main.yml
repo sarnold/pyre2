@@ -18,22 +18,22 @@ jobs:
           arch: "x86_64"
         - os: "ubuntu-22.04"
           arch: "aarch64"
-        - os: "macos-14"
+        - os: "macos-15"
           arch: "arm64"
-          macosx_deployment_target: "14.0"
-        - os: "windows-latest"
+          macosx_deployment_target: "15.0"
+        - os: "windows-2022"
           arch: "auto64"
           triplet: "x64-windows"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         name: Install Python
         with:
-          python-version: '3.10'
+          python-version: '3.14'
 
       - name: Set up QEMU
         if: runner.os == 'Linux'
@@ -42,15 +42,14 @@ jobs:
           platforms: all
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.20
+        uses: pypa/cibuildwheel@v4.2.0
         env:
           # configure cibuildwheel to build native archs ('auto'), and some
           # emulated ones, plus cross-compile on macos
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_TEST_SKIP: "*_arm64 *universal2:arm64 *linux_i686"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
-          CIBW_MANYLINUX_I686_IMAGE: manylinux2010
-          CIBW_BUILD: cp310-* cp311-* cp312-* cp313-* cp314-*
+          CIBW_BUILD: cp311-* cp312-* cp313-* cp314-* cp315-*
           CIBW_SKIP: "*musllinux* *i686"
           CIBW_BEFORE_ALL_LINUX: >
             yum -y update && yum -y install epel-release && yum install -y re2-devel ninja-build
@@ -61,7 +60,7 @@ jobs:
           CIBW_BEFORE_ALL_WINDOWS: >
             vcpkg install pkgconf:${{ matrix.triplet }} re2:${{ matrix.triplet }}
             && vcpkg integrate install
-          CIBW_ENVIRONMENT_WINDOWS: 'CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake'
+          CIBW_ENVIRONMENT_WINDOWS: 'CMAKE_GENERATOR="Visual Studio 17 2022" CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake'
           CIBW_TEST_REQUIRES: ""
           CIBW_TEST_COMMAND: ""
 
@@ -74,12 +73,12 @@ jobs:
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         name: Install Python
         with:
-          python-version: '3.10'
+          python-version: '3.14'
 
       - name: Build sdist
         run: |
